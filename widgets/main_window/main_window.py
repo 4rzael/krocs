@@ -1,9 +1,3 @@
-""" Python imports. """
-import sys
-
-""" path tricks. """
-sys.path.append('..')
-
 """ PyQt5 imports. """
 
 from PyQt5.QtWidgets import (QMainWindow, QAction, QStatusBar,
@@ -11,8 +5,7 @@ QLabel, QMdiArea)
 
 """ Proprietary imports. """
 
-from .connection_window import ConnectionWindow
-
+from widgets import ConnectionWindow
 from objects import Vessels
 
 class MainWindow(QMainWindow):
