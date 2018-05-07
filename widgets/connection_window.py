@@ -1,3 +1,10 @@
+""" Python imports. """
+
+import sys
+
+""" path tricks. """
+sys.path.append('..')
+
 """ PyQt5 imports. """
 
 from PyQt5.QtCore import QRegExp
@@ -7,7 +14,7 @@ QFormLayout)
 
 """ Proprietary imports. """
 
-from frame_utils import SunkenHLine
+from utils import SunkenHLine, valid_color, intermediate_color
 
 class ConnectionWindow(QWidget):
     """ Connection to kRPC server window."""
@@ -97,11 +104,11 @@ class ConnectionWindow(QWidget):
         validator = sender.validator()
         state = validator.validate(sender.text(), 0)[0]
         if state == QValidator.Acceptable:
-            color = "#c4df9b" # green
+            color = valid_color
         elif state == QValidator.Intermediate:
-            color = "#fff79a" # yellow
+            color = intermediate_color
         else:
-            color = "#f6989d" # red
+            color = critical_color
         sender.setStyleSheet("QLineEdit { background-color: %s }" % color)
 
         name_validator = self.name.validator()

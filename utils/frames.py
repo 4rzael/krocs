@@ -1,4 +1,5 @@
 """ PyQt5 imports. """
+
 from PyQt5.QtWidgets import QFrame
 
 class SunkenHLine(QFrame):

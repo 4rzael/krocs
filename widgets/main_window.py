@@ -5,7 +5,7 @@ QLabel, QMdiArea)
 
 """ Proprietary imports. """
 
-from connection_window import ConnectionWindow
+from .connection_window import ConnectionWindow
 
 class MainWindow(QMainWindow):
 

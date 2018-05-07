@@ -12,8 +12,8 @@ import krpc
 
 """ Proprietary imports. """
 
-from main_window import MainWindow
-from connection import Connection
+from widgets import MainWindow
+from objects import Connection
 
 def window():
    app = QApplication(sys.argv)

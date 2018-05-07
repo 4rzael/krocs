@@ -1,7 +1,12 @@
 """ Python imports. """
 
+import sys
 import errno
 from socket import error as socket_error
+
+""" Path tricks. """
+
+sys.path.append('..')
 
 """ PyQt5 imports. """
 
@@ -13,7 +18,7 @@ import krpc
 
 """ Proprietary imports. """
 
-from dialog_utils import show_error, show_info
+from utils import show_error, show_info
 
 class Connection(QObject):
     """kRPC connection wrapper."""
