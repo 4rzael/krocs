@@ -2,14 +2,18 @@
 
 from PyQt5.QtCore import QObject, pyqtSignal
 
+""" Other external library imports. """
+
+from krpc.error import RPCError
+
 """ Proprietary imports. """
 
-from utils import SunkenHLine, valid_color, intermediate_color
+from utils import SunkenHLine, valid_color, intermediate_color, show_error
 
 class UniversalTime(QObject):
     """ Universal time wrapper. """
 
-    updated = pyqtSignal()
+    updated = pyqtSignal(float)
 
     def __init__(self, conn):
         super(UniversalTime, self).__init__()
@@ -17,29 +21,26 @@ class UniversalTime(QObject):
         """ Connection object as attribute. """
 
         self.conn = conn
-        self.conn.connection_open.connect(self.conn_synced)
-        self.conn.connection_close.connect(self.conn_unsynced)
+        self.conn.conn_synced.connect(self._conn_synced)
 
         """ Attributes definition. """
 
-        self.ut_stream = None
-        self.ut = None
+        self.stream = None
+        self.value = None
 
         """ Callback definition. """
 
-    def update(self, ut):
-        self.ut = ut
-        self.updated.emit()
+    def _update(self, value):
+        if type(value) is RPCError:
+            show_error('RPCError received in ut stream', '', str(value))
+        else:
+            self.value = value
+            self.updated.emit(self.value)
 
-    def conn_synced(self):
+    def _conn_synced(self):
         """ Updating view if new connection. """
 
-        space_center = self.conn.conn.space_center
-        self.ut_stream = self.conn.conn.add_stream(getattr, space_center, 'ut')
-        self.ut_stream.add_callback(self.update)
-        self.ut_stream.start()
-
-    def conn_unsynced(self):
-        """ Updating view if closed connection. """
-
-        self.ut = None
+        self.stream = self.conn.value.add_stream(getattr,
+        self.conn.value.space_center, 'ut')
+        self.stream.add_callback(self._update)
+        self.stream.start()

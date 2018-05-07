@@ -22,35 +22,35 @@ from utils import show_error, show_info
 
 class Connection(QObject):
     """kRPC connection wrapper."""
-    connection_open = pyqtSignal()
-    connection_close = pyqtSignal()
+    conn_synced = pyqtSignal()
+    conn_unsynced = pyqtSignal()
 
     def __init__(self):
         super(Connection, self).__init__()
         self.connected = False
-        self.conn = None
+        self.value = None
         self.name = None
         self.addr = None
         self.rpc_port = None
         self.stream_port = None
 
     """ Set a new connection. """
-    def setConn(self, name, addr, rpc_port, stream_port):
-        if self.conn != None:
+    def sync(self, name, addr, rpc_port, stream_port):
+        if self.value != None:
             self.close()
         try:
-            conn = krpc.connect(
+            value = krpc.connect(
                 name = name,
                 address = addr,
                 rpc_port = rpc_port,
                 stream_port= stream_port)
-            self.conn = conn
+            self.value = value
             self.name = name
             self.addr = addr
             self.rpc_port = rpc_port
             self.stream_port = stream_port
             self.conneced = True
-            self.connection_open.emit()
+            self.conn_synced.emit()
             show_info("Connection established.", "Successfully\
             connected to %s." % addr, "Connected to %s as %s\
             with rpc and stream ports respectively %s and %s" %
@@ -62,14 +62,14 @@ class Connection(QObject):
                 raise serr
 
     """ Terminate connection if any. """
-    def close(self):
-        if self.conn != None:
-            self.conn.close()
-            self.conn = None
+    def unsync(self):
+        if self.value != None:
+            self.value.close()
+            self.value = None
             self.name = None
             self.addr = None
             self.rpc_port = None
             self.stream_port = None
             self.connected = False
-            self.connection_close.emit()
+            self.conn_unsynced.emit()
             show_info("Connection terminated.", None, None)

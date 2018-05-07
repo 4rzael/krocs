@@ -1,4 +1,5 @@
 """ Python imports. """
+
 import sys
 
 """ Path tricks. """
@@ -24,8 +25,8 @@ class ConnectionWindow(QWidget):
         """ Connection object as attribute. """
 
         self.conn = conn
-        self.conn.connection_open.connect(self.connected)
-        self.conn.connection_close.connect(self.closed)
+        self.conn.conn_synced.connect(self._conn_synced)
+        self.conn.conn_unsynced.connect(self._conn_unsynced)
 
         """ Connection form attributes definitions. """
 
@@ -57,16 +58,16 @@ class ConnectionWindow(QWidget):
         self.stream_port.setValidator(tcp_validator)
         self.stream_port.textChanged.connect(self.validate_form)
 
-        self.conn_btn = QPushButton("Connect")
-        self.conn_btn.setDefault(True)
-        self.conn_btn.clicked.connect(lambda:self.request_connect())
+        self.sync_btn = QPushButton("Connect")
+        self.sync_btn.setDefault(True)
+        self.sync_btn.clicked.connect(lambda:self._request_sync())
 
         status_lbl = QLabel("Connection status:")
         self.status = QLabel("Not connected.")
 
-        self.close_btn = QPushButton("Close connection")
-        self.close_btn.setEnabled(False)
-        self.close_btn.clicked.connect(lambda:self.request_close())
+        self.unsync_btn = QPushButton("Disconnect")
+        self.unsync_btn.setEnabled(False)
+        self.unsync_btn.clicked.connect(lambda:self._request_unsync())
 
         """ Connection form layout definition. """
 
@@ -75,10 +76,10 @@ class ConnectionWindow(QWidget):
         fbox.addRow(addr_lbl, self.addr)
         fbox.addRow(rpc_port_lbl, self.rpc_port)
         fbox.addRow(stream_port_lbl, self.stream_port)
-        fbox.addRow(self.conn_btn)
+        fbox.addRow(self.sync_btn)
         fbox.addRow(SunkenHLine())
         fbox.addRow(status_lbl, self.status)
-        fbox.addRow(self.close_btn)
+        fbox.addRow(self.unsync_btn)
 
         """ Connection window layout definition. """
 
@@ -119,34 +120,32 @@ class ConnectionWindow(QWidget):
         addr_state = addr_validator.validate(self.addr.text(), 0)[0]
         rpc_port_state = rpc_port_validator.validate(self.rpc_port.text(), 0)[0]
         stream_port_state = stream_port_validator.validate(
-         self.stream_port.text(), 0)[0]
+        self.stream_port.text(), 0)[0]
 
         if (name_state == QValidator.Acceptable and
             addr_state == QValidator.Acceptable and
             rpc_port_state == QValidator.Acceptable and
             stream_port_state == QValidator.Acceptable):
-            self.conn_btn.setEnabled(True)
+            self.sync_btn.setEnabled(True)
         else:
-            self.conn_btn.setEnabled(False)
+            self.sync_btn.setEnabled(False)
 
-    def request_connect(self):
+    def _request_sync(self):
         """ Requesting a connection object from a kRPC server. """
-
-        self.conn.setConn(self.name.text(), self.addr.text(),
+        self.conn.sync(self.name.text(), self.addr.text(),
         int(self.rpc_port.text()), int(self.stream_port.text()))
 
-    def request_close(self):
+    def _request_unsync(self):
         """ Terminating a connection. """
+        self.conn.unsync()
+        self.unsync_btn = QPushButton("Close connection")
 
-        self.conn.close()
-
-    def connected(self):
+    def _conn_synced(self):
         """ Updating view if new connection. """
-
         self.status.setText("Connected to %s." % self.conn.addr)
-        self.close_btn.setEnabled(True)
+        self.unsync_btn.setEnabled(True)
 
-    def closed(self):
+    def _conn_unsynced(self):
         """ Updating view if closed connection. """
         self.status.setText("Not connected.")
-        self.close_btn.setEnabled(False)
+        self.unsync_btn.setEnabled(False)
