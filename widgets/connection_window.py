@@ -2,7 +2,7 @@
 
 import sys
 
-""" path tricks. """
+""" Path tricks. """
 sys.path.append('..')
 
 """ PyQt5 imports. """
