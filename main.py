@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """ Python imports. """
 
 import sys
