@@ -27,6 +27,7 @@ class Connection(QObject):
 
     def __init__(self):
         super(Connection, self).__init__()
+        self.connected = False
         self.conn = None
         self.name = None
         self.addr = None
@@ -48,6 +49,7 @@ class Connection(QObject):
             self.addr = addr
             self.rpc_port = rpc_port
             self.stream_port = stream_port
+            self.conneced = True
             self.connection_open.emit()
             show_info("Connection established.", "Successfully\
             connected to %s." % addr, "Connected to %s as %s\
@@ -68,5 +70,6 @@ class Connection(QObject):
             self.addr = None
             self.rpc_port = None
             self.stream_port = None
+            self.connected = False
             self.connection_close.emit()
             show_info("Connection terminated.", None, None)
