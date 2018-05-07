@@ -44,11 +44,11 @@ class MainWindow(QMainWindow):
 
       """ Populating Vessels menu. """
 
-      def populate_vessels(vessels):
+      def vessels_updated(vessels):
           vessels_menu.clear()
           for vessel in vessels:
               vessels_menu.addAction(vessel.name)
-      self.objects['vessels'].refreshed.connect(populate_vessels)
+      self.objects['vessels'].updated.connect(vessels_updated)
 
       """ Populating status bar. """
 
@@ -64,7 +64,6 @@ class MainWindow(QMainWindow):
       self.setCentralWidget(self.mdi)
 
    def remoteaction(self, q):
-
        if q.text() == "Connection to kRPC server":
           connection_window = ConnectionWindow(self.conn)
           connection_window.show()
