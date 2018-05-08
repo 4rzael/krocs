@@ -14,7 +14,7 @@ QFormLayout)
 
 """ Proprietary imports. """
 
-from utils import SunkenHLine, valid_color, intermediate_color
+from utils import SunkenHLine, valid_color, intermediate_color, critical_color
 
 class ConnectionWindow(QWidget):
     """ Connection to kRPC server window."""
@@ -31,14 +31,14 @@ class ConnectionWindow(QWidget):
         """ Connection form attributes definitions. """
 
         name_lbl = QLabel("Connection name:")
-        self.name = QLineEdit()
+        self.name = QLineEdit("Default")
         name_regexp = QRegExp("^[\w\-\s]+$")
         name_validator = QRegExpValidator(name_regexp)
         self.name.setValidator(name_validator)
 
         self.name.textChanged.connect(self.validate_form)
         addr_lbl = QLabel("Server address:")
-        self.addr = QLineEdit()
+        self.addr = QLineEdit("127.0.0.1")
         ipv4_regexp = QRegExp("((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}" +
         "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")
         ipv4_validator = QRegExpValidator(ipv4_regexp)
@@ -46,7 +46,7 @@ class ConnectionWindow(QWidget):
         self.addr.textChanged.connect(self.validate_form)
 
         rpc_port_lbl = QLabel("RPC port:")
-        self.rpc_port = QLineEdit()
+        self.rpc_port = QLineEdit("50000")
         tcp_regexp = QRegExp("([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65" +
         "[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])")
         tcp_validator = QRegExpValidator(tcp_regexp)
@@ -54,7 +54,7 @@ class ConnectionWindow(QWidget):
         self.rpc_port.textChanged.connect(self.validate_form)
 
         stream_port_lbl = QLabel("Stream port:")
-        self.stream_port = QLineEdit()
+        self.stream_port = QLineEdit("50001")
         self.stream_port.setValidator(tcp_validator)
         self.stream_port.textChanged.connect(self.validate_form)
 
@@ -64,6 +64,9 @@ class ConnectionWindow(QWidget):
 
         status_lbl = QLabel("Connection status:")
         self.status = QLabel("Not connected.")
+        self.status.setAutoFillBackground(True)
+        self.status.setStyleSheet(
+        "QLabel { background-color: %s; }" % critical_color)
 
         self.unsync_btn = QPushButton("Disconnect")
         self.unsync_btn.setEnabled(False)
@@ -143,9 +146,13 @@ class ConnectionWindow(QWidget):
     def _conn_synced(self):
         """ Updating view if new connection. """
         self.status.setText("Connected to %s." % self.conn.addr)
+        self.status.setStyleSheet(
+        "QLabel { background-color: %s; }" % valid_color)
         self.unsync_btn.setEnabled(True)
 
     def _conn_unsynced(self):
         """ Updating view if closed connection. """
         self.status.setText("Not connected.")
+        self.status.setStyleSheet(
+        "QLabel { background-color: %s; }" % critical_color)
         self.unsync_btn.setEnabled(False)
