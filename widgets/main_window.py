@@ -7,6 +7,7 @@ sys.path.append('..')
 
 """ PyQt5 imports. """
 
+from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import (QMainWindow, QAction, QStatusBar,
 QLabel, QMdiArea)
 
@@ -78,6 +79,10 @@ class MainWindow(QMainWindow):
       self.setWindowTitle("Krocs")
       self.mdi = QMdiArea()
       self.setCentralWidget(self.mdi)
+
+   """ Catch main window close event to close application. """
+   def closeEvent(self, event):
+       QCoreApplication.instance().quit()
 
    def _conn_synced(self):
        """ Updating view if new connection. """

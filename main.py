@@ -2,6 +2,7 @@
 """ Python imports. """
 
 import sys
+import signal
 
 """ PyQt5 imports. """
 
@@ -26,4 +27,7 @@ def window():
    sys.exit(app.exec_())
 
 if __name__ == "__main__":
+   """ Catch Ctrl^C in console mod. """
+   signal.signal(signal.SIGINT, signal.SIG_DFL)
+
    window()
