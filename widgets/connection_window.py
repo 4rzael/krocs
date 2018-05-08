@@ -14,7 +14,8 @@ QFormLayout)
 
 """ Proprietary imports. """
 
-from utils import SunkenHLine, valid_color, intermediate_color, critical_color
+from utils import (SunkenHLine, StatusLabel, valid_color, intermediate_color,
+critical_color)
 
 class ConnectionWindow(QWidget):
     """ Connection to kRPC server window."""
@@ -63,10 +64,7 @@ class ConnectionWindow(QWidget):
         self.sync_btn.clicked.connect(lambda:self._request_sync())
 
         status_lbl = QLabel("Connection status:")
-        self.status = QLabel("Not connected.")
-        self.status.setAutoFillBackground(True)
-        self.status.setStyleSheet(
-        "QLabel { background-color: %s; }" % critical_color)
+        self.status = StatusLabel("Not connected.")
 
         self.unsync_btn = QPushButton("Disconnect")
         self.unsync_btn.setEnabled(False)
@@ -146,13 +144,11 @@ class ConnectionWindow(QWidget):
     def _conn_synced(self):
         """ Updating view if new connection. """
         self.status.setText("Connected to %s." % self.conn.addr)
-        self.status.setStyleSheet(
-        "QLabel { background-color: %s; }" % valid_color)
+        self.status.setValid()
         self.unsync_btn.setEnabled(True)
 
     def _conn_unsynced(self):
         """ Updating view if closed connection. """
         self.status.setText("Not connected.")
-        self.status.setStyleSheet(
-        "QLabel { background-color: %s; }" % critical_color)
+        self.status.setCritical()
         self.unsync_btn.setEnabled(False)
