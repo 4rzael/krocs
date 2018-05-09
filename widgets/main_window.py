@@ -15,7 +15,7 @@ QLabel, QMdiArea)
 
 from widgets import ConnectionWindow
 from objects import UniversalTime, Vessels
-from utils import valid_color, intermediate_color, critical_color
+from utils import StatusLabel
 
 class MainWindow(QMainWindow):
 
@@ -25,8 +25,8 @@ class MainWindow(QMainWindow):
       """ Connection object as attribute. """
 
       self.conn = conn
-      self.conn.conn_synced.connect(self._conn_synced)
-      self.conn.conn_unsynced.connect(self._conn_unsynced)
+      self.conn.synced.connect(self._conn_synced)
+      self.conn.unsynced.connect(self._conn_unsynced)
 
       """ Dictionary of objects available to the window and widgets"""
 
@@ -59,14 +59,8 @@ class MainWindow(QMainWindow):
 
       """ Populating status bar. """
 
-      self.status_conn = QLabel("Not connected.")
-      self.status_conn.setAutoFillBackground(True)
-      self.status_conn.setStyleSheet(
-      "QLabel { background-color: %s; }" % critical_color)
-      self.status_ut = QLabel("UT not synchronized.")
-      self.status_ut.setAutoFillBackground(True)
-      self.status_ut.setStyleSheet(
-      "QLabel { background-color: %s; }" % critical_color)
+      self.status_conn = StatusLabel("Not connected.")
+      self.status_ut = StatusLabel("UT not synchronized.")
       self.status_bar = QStatusBar()
       self.status_bar.addWidget(self.status_conn)
       self.status_bar.addWidget(self.status_ut)
@@ -87,17 +81,14 @@ class MainWindow(QMainWindow):
    def _conn_synced(self):
        """ Updating view if new connection. """
        self.status_conn.setText("Connected to %s." % self.conn.addr)
-       self.status_conn.setStyleSheet(
-       "QLabel { background-color: %s; }" % valid_color)
+       self.status_conn.setValid()
 
    def _conn_unsynced(self):
        """ Updating view if closed connection. """
        self.status_conn.setText("Not connected.")
-       self.status_conn.setStyleSheet(
-       "QLabel { background-color: %s; }" % critical_color)
+       self.status_conn.setCritical()
        self.status_ut.setText("UT: Not synchronized.")
-       self.status_ut.setStyleSheet(
-       "QLabel { background-color: %s; }" % critical_color)
+       self.status_ut.setCritical()
 
    def _ut_updated(self):
        """ Update view if UT changed. """
@@ -107,5 +98,4 @@ class MainWindow(QMainWindow):
        (int(self.objects['ut'].value) // 3600) % 6,
        (int(self.objects['ut'].value) // 60) % 60,
        int(self.objects['ut'].value) % 60))
-       self.status_ut.setStyleSheet(
-       "QLabel { background-color: %s; }" % valid_color)
+       self.status_ut.setValid()

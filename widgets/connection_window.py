@@ -26,8 +26,8 @@ class ConnectionWindow(QWidget):
         """ Connection object as attribute. """
 
         self.conn = conn
-        self.conn.conn_synced.connect(self._conn_synced)
-        self.conn.conn_unsynced.connect(self._conn_unsynced)
+        self.conn.synced.connect(self._conn_synced)
+        self.conn.unsynced.connect(self._conn_unsynced)
 
         """ Connection form attributes definitions. """
 
@@ -67,7 +67,8 @@ class ConnectionWindow(QWidget):
         self.status = StatusLabel("Not connected.")
 
         self.unsync_btn = QPushButton("Disconnect")
-        self.unsync_btn.setEnabled(False)
+        if self.conn.connected == False:
+            self.unsync_btn.setEnabled(False)
         self.unsync_btn.clicked.connect(lambda:self._request_unsync())
 
         """ Connection form layout definition. """
