@@ -71,5 +71,5 @@ class Connection(QObject):
             self.rpc_port = None
             self.stream_port = None
             self.connected = False
-            self.conn_unsynced.emit()
+            self.unsynced.emit()
             show_info("Connection terminated.", None, None)
