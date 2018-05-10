@@ -24,8 +24,8 @@ class Vessels(QObject):
         self.conn = conn
         self.vessels = None
         self.conn.connection_open.connect(self.on_connect)
-    def on_connect(self):
 
+    def on_connect(self):
         vessel_stream = self.conn.conn.add_stream(getattr, self.conn.conn.space_center, 'vessels')
         vessel_stream.add_callback(self.on_change)
         vessel_stream.start()
