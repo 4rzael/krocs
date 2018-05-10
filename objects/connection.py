@@ -60,6 +60,10 @@ class Connection(QObject):
                 show_error("Connection refused.", None, None)
             else:
                 raise serr
+        except krpc.error.ConnectionError as cerr:
+            show_error("Connection Error.",
+            "Connection to krpc server raised error.",
+            str(cerr))
 
     """ Terminate connection if any. """
     def unsync(self):

@@ -7,7 +7,7 @@ sys.path.append('..')
 
 """ PyQt5 imports. """
 
-from PyQt5.QtCore import QRegExp
+from PyQt5.QtCore import QRegExp, Qt
 from PyQt5.QtGui import QRegExpValidator, QValidator
 from PyQt5.QtWidgets import (QWidget, QLabel, QLineEdit, QPushButton,
 QFormLayout)
@@ -22,6 +22,9 @@ class ConnectionWindow(QWidget):
 
     def __init__(self, conn):
         super(ConnectionWindow, self).__init__()
+
+        """ Set window modality """
+        self.setWindowModality(Qt.WindowModal)
 
         """ Connection object as attribute. """
 
