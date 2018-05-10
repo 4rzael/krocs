@@ -22,4 +22,5 @@ class BasicVesselWidget(QWidget):
       fbox.addRow(name_label)
 
       self.setLayout(fbox)
+
       self.setMaximumSize(400, 300)

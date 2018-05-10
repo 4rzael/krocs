@@ -37,9 +37,6 @@ class VesselWindow(QMainWindow):
                 action.setCheckable(True)
 
                 def spawn_mdi():
-                    print(self.bar_menus, self.widgets, menu, action, action.text())
-                    print(self.bar_menus[menu], action, self.widgets[menu][action.text()])
-
                     sub = BasicVesselWidget(self.conn, self.objects, self.vessel, parent = self)
                     self.mdi.addSubWindow(sub)
                     sub.show()
