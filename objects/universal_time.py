@@ -21,7 +21,7 @@ class UniversalTime(QObject):
         """ Connection object as attribute. """
 
         self.conn = conn
-        self.conn.conn_synced.connect(self._conn_synced)
+        self.conn.synced.connect(self._conn_synced)
 
         """ Attributes definition. """
 

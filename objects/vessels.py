@@ -18,7 +18,7 @@ class Vessels(QObject):
         super(Vessels, self).__init__()
         self.conn = conn
         self.value = None
-        self.conn.conn_synced.connect(self._conn_synced)
+        self.conn.synced.connect(self._conn_synced)
     def _conn_synced(self):
 
         vessel_stream = self.conn.value.add_stream(getattr, self.conn.value.space_center, 'vessels')

@@ -21,17 +21,17 @@ class StatusLabel(QLabel):
         "QLabel { margin-left: 5px; border-radius: 5px; " +
         "background-color: %s; }" % critical_color)
 
-    def setValid():
+    def setValid(self):
         self.setStyleSheet(
         "QLabel { margin-left: 5px; border-radius: 5px; " +
         "background-color: %s; }" % valid_color)
 
-    def setIntermediate():
+    def setIntermediate(self):
         self.setStyleSheet(
         "QLabel { margin-left: 5px; border-radius: 5px; " +
         "background-color: %s; }" % intermediate_color)
 
-    def setCritical():
+    def setCritical(self):
         self.setStyleSheet(
         "QLabel { margin-left: 5px; border-radius: 5px; " +
         "background-color: %s; }" % critical_color)

@@ -7,7 +7,7 @@ sys.path.append('..')
 
 """ PyQt5 imports. """
 
-from PyQt5.QtCore import QRegExp
+from PyQt5.QtCore import QRegExp, Qt
 from PyQt5.QtGui import QRegExpValidator, QValidator
 from PyQt5.QtWidgets import (QWidget, QLabel, QLineEdit, QPushButton,
 QFormLayout)
@@ -23,11 +23,14 @@ class ConnectionWindow(QWidget):
     def __init__(self, conn):
         super(ConnectionWindow, self).__init__()
 
+        """ Set window modality """
+        self.setWindowModality(Qt.WindowModal)
+
         """ Connection object as attribute. """
 
         self.conn = conn
-        self.conn.conn_synced.connect(self._conn_synced)
-        self.conn.conn_unsynced.connect(self._conn_unsynced)
+        self.conn.synced.connect(self._conn_synced)
+        self.conn.unsynced.connect(self._conn_unsynced)
 
         """ Connection form attributes definitions. """
 
@@ -67,7 +70,8 @@ class ConnectionWindow(QWidget):
         self.status = StatusLabel("Not connected.")
 
         self.unsync_btn = QPushButton("Disconnect")
-        self.unsync_btn.setEnabled(False)
+        if self.conn.connected == False:
+            self.unsync_btn.setEnabled(False)
         self.unsync_btn.clicked.connect(lambda:self._request_unsync())
 
         """ Connection form layout definition. """

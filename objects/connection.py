@@ -22,8 +22,8 @@ from utils import show_error, show_info
 
 class Connection(QObject):
     """kRPC connection wrapper."""
-    conn_synced = pyqtSignal()
-    conn_unsynced = pyqtSignal()
+    synced = pyqtSignal()
+    unsynced = pyqtSignal()
 
     def __init__(self):
         super(Connection, self).__init__()
@@ -49,8 +49,8 @@ class Connection(QObject):
             self.addr = addr
             self.rpc_port = rpc_port
             self.stream_port = stream_port
-            self.conneced = True
-            self.conn_synced.emit()
+            self.connected = True
+            self.synced.emit()
             show_info("Connection established.", "Successfully\
             connected to %s." % addr, "Connected to %s as %s\
             with rpc and stream ports respectively %s and %s" %
@@ -60,6 +60,10 @@ class Connection(QObject):
                 show_error("Connection refused.", None, None)
             else:
                 raise serr
+        except krpc.error.ConnectionError as cerr:
+            show_error("Connection Error.",
+            "Connection to krpc server raised error.",
+            str(cerr))
 
     """ Terminate connection if any. """
     def unsync(self):
@@ -71,5 +75,5 @@ class Connection(QObject):
             self.rpc_port = None
             self.stream_port = None
             self.connected = False
-            self.conn_unsynced.emit()
+            self.unsynced.emit()
             show_info("Connection terminated.", None, None)
