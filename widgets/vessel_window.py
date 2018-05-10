@@ -12,12 +12,11 @@ class VesselWindow(QMainWindow):
     def __init__(self, conn, objects, vessel, parent = None):
         super(VesselWindow, self).__init__(parent)
 
-        """ Connection object as attribute. """
-
         self.conn = conn
         self.objects = objects
         self.vessel = vessel
 
+        """ Widgets in the menu. """
         self.widgets = {
             'general': {
                 'basic': BasicVesselWidget
@@ -36,13 +35,14 @@ class VesselWindow(QMainWindow):
                 action = self.bar_menus[menu].addAction(name)
                 action.setCheckable(True)
 
-                def spawn_mdi():
+                """ Creating the widget in the MDI area. """
+                def spawn_widget():
                     sub = BasicVesselWidget(self.conn, self.objects, self.vessel, parent = self)
                     self.mdi.addSubWindow(sub)
                     sub.show()
                     self.mdi.tileSubWindows()
 
-                action.toggled.connect(spawn_mdi)
+                action.toggled.connect(spawn_widget)
 
         """ Define window layout. """
         self.setWindowTitle(self.vessel.name)

@@ -1,6 +1,7 @@
 from ..vessel_window import VesselWindow
 from PyQt5.QtWidgets import QMainWindow
 
+""" "Vessels" menu handler in main window """
 class VesselsMenu(object):
     def __init__(self, window, vessels, bar):
         self.window = window
@@ -10,6 +11,7 @@ class VesselsMenu(object):
 
         self.vessel_windows = {}
 
+        """ Updating menu content """
         def vessels_updated(vessels):
             self.menu.clear()
             for vessel in vessels:
@@ -17,7 +19,6 @@ class VesselsMenu(object):
                 action.setCheckable(True)
                 action.toggled.connect(lambda *args: self.on_vessel_click(action, vessel))
         self.vessels.updated.connect(vessels_updated)
-
 
     def on_vessel_click(self, action, vessel):
         if vessel in self.vessel_windows.keys():
