@@ -1,12 +1,7 @@
 """ Python imports. """
 
-import sys
 import errno
 from socket import error as socket_error
-
-""" Path tricks. """
-
-sys.path.append('..')
 
 """ PyQt5 imports. """
 

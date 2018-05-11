@@ -1,12 +1,5 @@
-""" Python imports. """
-
-import sys
-
-""" Path tricks. """
-sys.path.append('..')
 
 """ PyQt5 imports. """
-
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import (QMainWindow, QAction, QStatusBar,
 QLabel, QMdiArea)
@@ -16,6 +9,7 @@ QLabel, QMdiArea)
 from widgets import ConnectionWindow
 from objects import UniversalTime, Vessels
 from utils import StatusLabel
+from .vessels_menu import VesselsMenu
 
 class MainWindow(QMainWindow):
 
@@ -38,7 +32,7 @@ class MainWindow(QMainWindow):
 
       bar = self.menuBar()
       remote_menu = bar.addMenu("Remote")
-      vessels_menu = bar.addMenu("Vessels")
+      vessels_menu = VesselsMenu(self, self.objects['vessels'], bar)
 
       """ Populating Remote menu. """
 
@@ -48,14 +42,6 @@ class MainWindow(QMainWindow):
               connection_window.show()
       remote_menu.addAction("Connection to kRPC server")
       remote_menu.triggered[QAction].connect(remote_action)
-
-      """ Populating Vessels menu. """
-
-      def vessels_updated(vessels):
-          vessels_menu.clear()
-          for vessel in vessels:
-              vessels_menu.addAction(vessel.name)
-      self.objects['vessels'].updated.connect(vessels_updated)
 
       """ Populating status bar. """
 

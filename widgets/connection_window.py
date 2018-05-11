@@ -1,10 +1,3 @@
-""" Python imports. """
-
-import sys
-
-""" Path tricks. """
-sys.path.append('..')
-
 """ PyQt5 imports. """
 
 from PyQt5.QtCore import QRegExp, Qt
